@@ -1,0 +1,26 @@
+{
+  "name": "k-components",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "web-dev-server",
+    "build": "tsc",
+    "lint": "eslint .",
+    "test": "npx playwright test test/init.test.js",
+    "ci": "npm run lint && web-test-runner",
+    "browserstack": "npx browserstack-node-sdk playwright test test/init.test.js",
+    "postinstall": "npm update browserstack-node-sdk"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@koddsson/eslint-config": "^1.1.0",
+    "@playwright/test": "^1.45.0",
+    "browserstack-node-sdk": "^1.34.1",
+    "eslint": "^8.57.0",
+    "typescript": "^5.5.1-rc"
+  }
+}

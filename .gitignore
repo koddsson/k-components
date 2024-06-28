@@ -1,0 +1,9 @@
+.envrc
+
+dist/
+node_modules/
+
+log/
+*.log
+test-results/
+playwright-report/
