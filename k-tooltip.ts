@@ -4,6 +4,8 @@ export class KToolTip extends HTMLElement {
     :host {
       --background-color: #333333;
       --foreground-color: #FFFFFF;
+
+      --padding: 4px;
     }
 
     /* https://developer.chrome.com/blog/anchor-positioning-api */
@@ -14,9 +16,14 @@ export class KToolTip extends HTMLElement {
 
     [popover] {
       /* Positioning */
-      inset-area: bottom;
+      position: fixed;
       position-anchor: --invoker-anchor;
-      margin-top: 8px;
+      inset-area: bottom;
+
+      position-try-options:
+        flip-block,
+        flip-inline,
+        flip-block flip-inline;
 
       /* Make it look like a tooltip */
       max-width: 300px;
@@ -26,22 +33,8 @@ export class KToolTip extends HTMLElement {
       padding: 5px 10px;
       overflow: visible;
       border-radius: 10px;
-    }
-
-    /* Create a tooltip triangle/arrow */
-    [popover]::before {
-      content: "";
-      bottom: 100%;
-      left: 50%;
-      border: solid transparent;
-      height: 0;
-      width: 0;
-      position: absolute;
-      pointer-events: none;
-      border-color: transparent;
-      border-bottom-color: var(--background-color);
-      border-width: 4px;
-      margin-left: -4px;
+      margin: 0;
+      margin-top: var(--padding);
     }
   `;
 
