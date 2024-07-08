@@ -4,12 +4,12 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "web-dev-server",
-    "build": "tsc",
+    "start": "web-dev-server --esbuild-target=auto",
+    "build": "rollup --config rollup.config.js",
     "lint": "eslint .",
-    "test": "npx playwright test test/init.test.js",
-    "ci": "npm run lint && web-test-runner",
-    "browserstack": "npx browserstack-node-sdk playwright test test/init.test.js",
+    "test:local": "web-test-runner",
+    "test:remote": "web-test-runner --config web-test-runner.browserstack.config.js",
+    "ci": "npm run lint && npm run test:local && npm run test:remote",
     "postinstall": "npm update browserstack-node-sdk"
   },
   "keywords": [],
@@ -19,8 +19,14 @@
   "devDependencies": {
     "@koddsson/eslint-config": "^1.1.0",
     "@playwright/test": "^1.45.0",
+    "@web/dev-server-esbuild": "^1.0.2",
+    "@web/rollup-plugin-html": "^2.3.0",
+    "@web/test-runner": "^0.18.2",
     "browserstack-node-sdk": "^1.34.1",
+    "chai": "^5.1.1",
     "eslint": "^8.57.0",
+    "rollup": "^4.18.0",
+    "rollup-plugin-esbuild": "^6.1.1",
     "typescript": "^5.5.1-rc"
   }
 }

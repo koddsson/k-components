@@ -1,34 +1,34 @@
 /** @todo This needs to be checked for accessibility. */
-export class IngTooltip extends HTMLElement {
+export class KToolTip extends HTMLElement {
   css = `
     :host {
       --background-color: #333333;
+      --foreground-color: #FFFFFF;
     }
 
     /* https://developer.chrome.com/blog/anchor-positioning-api */
+
+    #invoker {
+      anchor-name: --invoker-anchor;
+    }
 
     [popover] {
       /* Positioning */
       inset-area: bottom;
       position-anchor: --invoker-anchor;
-      margin-top: 12px;
+      margin-top: 8px;
 
       /* Make it look like a tooltip */
       max-width: 300px;
-      border-radius: 15px;
-      padding: 5px 10px;
-
-      color: white;
-      border: 0;
-
       background: var(--background-color);
-      color: white;
+      color: var(--foreground-color);
       border: none;
-      padding: 0 1rem;
+      padding: 5px 10px;
       overflow: visible;
-      border-radius: 1rem;
+      border-radius: 10px;
     }
 
+    /* Create a tooltip triangle/arrow */
     [popover]::before {
       content: "";
       bottom: 100%;
@@ -40,54 +40,59 @@ export class IngTooltip extends HTMLElement {
       pointer-events: none;
       border-color: transparent;
       border-bottom-color: var(--background-color);
-      border-width: 8px;
-      margin-left: -8px;
-    }
-
-    #invoker {
-      anchor-name: --invoker-anchor;
+      border-width: 4px;
+      margin-left: -4px;
     }
   `;
 
-  html = `<span id="invoker">
-      <slot
-        name="invoker"
-        @focusin="${this.open}"
-        @mouseenter="${this.open}"
-        @focusout="${this.close}"
-        @mouseleave="${this.close}"
-      ></slot>
-    </span>
-    <div popover>
-      <slot name="content"></slot>
-    </div>`;
+  html = `
+<span id="invoker">
+  <slot name="invoker"></slot>
+</span>
+<div popover>
+  <slot name="content"></slot>
+</div>`;
+
+  static observedAttributes = ["open"];
 
   constructor() {
     super();
-    const shadow = this.attachShadow({ mode: "closed" });
-    shadow.innerHTML = `<style>${this.style}</style>${this.html}`;
+
+    const shadow = this.attachShadow({ mode: "open" });
+    shadow.innerHTML = `<style>${this.css}</style>${this.html}`;
     shadow.addEventListener("focusin", this);
     shadow.addEventListener("focusout", this);
-    shadow.addEventListener("mouseenter", this);
-    shadow.addEventListener("mouseleave", this);
+    shadow.addEventListener("mouseover", this);
+    shadow.addEventListener("mouseout", this);
   }
 
   handleEvent(event: Event) {
-    if (event.type === "mouseenter" || event.type === "focusin") {
+    if (event.type === "mouseover" || event.type === "focusin") {
       this.open();
     }
-    if (event.type === "mouseleave" || event.type === "focusout") {
+    if (event.type === "mouseout" || event.type === "focusout") {
       this.close();
     }
   }
 
   open() {
+    if (this.hasAttribute("open")) return;
+
     // @ts-expect-error Popover isn't in typescript definitions yet.
     this.shadowRoot?.querySelector("div[popover]")?.showPopover();
+    this.setAttribute("open", "");
   }
 
   close() {
+    if (!this.hasAttribute("open")) return;
+
     // @ts-expect-error Popover isn't in typescript definitions yet.
     this.shadowRoot?.querySelector("div[popover]")?.hidePopover();
+    this.removeAttribute("open");
+  }
+
+  attributeChangedCallback(name: string, oldValue: string, newValue: string) {
+    if (name === "open" && newValue === null) this.close();
+    if (name === "open" && newValue !== null) this.open();
   }
 }
