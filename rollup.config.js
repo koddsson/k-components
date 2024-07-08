@@ -5,6 +5,6 @@ export default {
   output: { dir: "dist" },
   plugins: [
     esbuild({ target: "es2022" }),
-    html({ input: ["index.html", "docs/*.html"] }),
+    html({ input: ["index.html", "tooltip.html"] }),
   ],
 };
