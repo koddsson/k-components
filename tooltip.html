@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>k-components</title>
+    <style>
+      html,
+      body {
+        height: 100vh;
+        margin: 0;
+      }
+      footer {
+        position: fixed;
+        bottom: 0;
+      }
+    </style>
+    <script type="module">
+      const { KToolTip } = await import("../k-tooltip.ts");
+      window.customElements.define("k-tooltip", KToolTip);
+    </script>
+  </head>
+  <body>
+    <header>
+      <k-tooltip>
+        <button slot="invoker">Hover or focus me!</button>
+        <span slot="content">hello!</span>
+      </k-tooltip>
+      <k-tooltip>
+        <button slot="invoker">Hover or focus me!</button>
+        <span slot="content">hello!</span>
+      </k-tooltip>
+    </header>
+    <footer>
+      <k-tooltip>
+        <button slot="invoker">Hover or focus me!</button>
+        <span slot="content">hello!</span>
+      </k-tooltip>
+      <k-tooltip>
+        <button slot="invoker">Hover or focus me!</button>
+        <span slot="content">hello!</span>
+      </k-tooltip>
+    </footer>
+  </body>
+</html>
